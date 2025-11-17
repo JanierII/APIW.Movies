@@ -16,5 +16,7 @@ namespace APIW.Movies.Repository.IRepository
         Task<bool> UpdateCategoryAsync(Category category); // ACTUALIZA NOMBRE Y FECHA DE ACTUALIZACION UNA NUEVA CATEGORIA
 
         Task<bool> DeleCateCategoryAsync(int id); // ELIMINA UNA CATEGORIA
+        Task<bool> CategoryExistsByNameAsync(string name);
+        Task GetCategoryAsync(int id);
     }
 }
