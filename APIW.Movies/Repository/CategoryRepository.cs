@@ -1,68 +1,67 @@
-﻿using APIW.Movies.DAL;
-using APIW.Movies.DAL.Models;
-using APIW.Movies.Repository.IRepository;
+﻿using API.W.Movies.DAL;
+using API.W.Movies.DAL.Models;
+using API.W.Movies.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 
-namespace APIW.Movies.Repository
+namespace API.W.Movies.Repository
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private  readonly ApplicationDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CategoryRepository(ApplicationDBContext contex)
+        public CategoryRepository(ApplicationDbContext context)
         {
-            _context = contex;
+            _context = context;
         }
 
         public async Task<bool> CategoryExistsByIdAsync(int id)
         {
             return await _context.Categories
                 .AsNoTracking()
-                .AnyAsync(C => C.Id == id); // LAMBDA EXPRESSION
-
+                .AnyAsync(c => c.Id == id);
         }
 
-        public async Task<bool> CategotyExistsByNameAsync(string name)
+        public async Task<bool> CategoryExistsByNameAsync(string name)
         {
             return await _context.Categories
                 .AsNoTracking()
-                .AnyAsync(C => C.Name == name); // LAMBDA EXPRESSION
+                .AnyAsync(c => c.Name == name);
         }
 
         public async Task<bool> CreateCategoryAsync(Category category)
         {
-            category.CreateDate = DateTime.UtcNow;
+            category.CreatedDate = DateTime.UtcNow;
             await _context.Categories.AddAsync(category);
-            return await SaveAsync(); //SQL INSERT
+            return await SaveAsync();
         }
 
-        public async Task<bool> DeleCateCategoryAsync(int id)
+        public async Task<bool> DeleteCategoryAsync(int id)
         {
-            var categorie  = await GetCategoryByIdAsync(id); // primero consultamos si existe la categoria
+            var category = await GetCategoryAsync(id); //primero consulto que sí exista la categoría
 
-            if (categorie == null)
+            if (category == null)
             {
-
-                return false; //la categoiria no existe
+                return false; //la categoría no existe
             }
-            _context.Categories.Remove(categorie); // eliminamos la categoria
-            return await SaveAsync(); // SQL DELETE
+
+            _context.Categories.Remove(category);
+            return await SaveAsync();
         }
 
         public async Task<ICollection<Category>> GetCategoriesAsync()
         {
             return await _context.Categories
                 .AsNoTracking()
-                .OrderBy(C => C.Name) // LAMBDA EXPRESSION
+                .OrderBy(c => c.Name)
                 .ToListAsync();
         }
 
-        public async Task<Category?> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryAsync(int id) //async y el await
         {
             return await _context.Categories
                 .AsNoTracking()
-                .FirstOrDefaultAsync(C => C.Id == id ); //LAMBDA EXPRESSION
-
+                .FirstOrDefaultAsync(c => c.Id == id); //lambda expressions
         }
 
         public async Task<bool> UpdateCategoryAsync(Category category)

@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Data;
-
-namespace APIW.Movies.DAL.Models
+namespace API.W.Movies.DAL.Models
 {
     public class AuditBase
     {
-        [Key]
-        public int Id { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        [Key] //Este data annotation indica que el campo es la clave primaria
+        public virtual int Id { get; set; }
+
+        public virtual DateTime CreatedDate { get; set; }
+
+        public virtual DateTime? ModifiedDate { get; set; }
     }
 }
