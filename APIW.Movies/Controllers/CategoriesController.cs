@@ -1,9 +1,8 @@
-﻿using API.W.Movies.Services;
+﻿using API.W.Movies.DAL.Models.Dtos;
 using API.W.Movies.Services.IServices;
-using APIW.Movies.DAL.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.W.Movies.Controllers
+namespace API.J.Movies.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,11 +15,11 @@ namespace API.W.Movies.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet(Name = "GetCategoriesAsync")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ICollection<CategoryDto>>> GetCategoriesAsync()
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategoriesAsync()
         {
             var categoriesDto = await _categoryService.GetCategoriesAsync();
             return Ok(categoriesDto);
@@ -111,16 +110,17 @@ namespace API.W.Movies.Controllers
         }
 
         [HttpDelete("{id:int}", Name = "DeleteCategoryAsync")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteCategoryAsync(int id)
         {
             try
             {
                 var deletedCategory = await _categoryService.DeleteCategoryAsync(id);
-                return Ok(deletedCategory); //retorno un OK para mostrar el "True" de la eliminación
+                return Ok(deletedCategory);
             }
             catch (InvalidOperationException ex) when (ex.Message.Contains("No se encontró"))
             {

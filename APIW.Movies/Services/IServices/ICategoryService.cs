@@ -1,7 +1,7 @@
-﻿using API.W.Movies.DAL.Models;
+﻿using API.J.Movies.DAL.Dtos.Category;
 using API.W.Movies.DAL.Models.Dtos;
 
-namespace API.W.Movies.Services.IServices
+namespace API.J.Movies.Services.IServices
 {
     public interface ICategoryService
     {
